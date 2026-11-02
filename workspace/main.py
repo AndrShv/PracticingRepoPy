@@ -1,9 +1,22 @@
+from contextlib import asynccontextmanager
+
+from fastapi import FastAPI
+import uvicorn
+
+from workspace.configs.db_config import DbConnection
 
 
-def print_hi(name):
-    print(f'Hi, {name}')
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    await DbConnection().init_db()
+    yield
 
 
-if __name__ == '__main__':
-    print_hi('PyCharm')
+fast_api_app = FastAPI(
+    title="Repo For Practicing Skills",
+    version="1.0.0",
+    lifespan=lifespan,
+)
 
+if __name__ == "__main__":
+    uvicorn.run(fast_api_app, host="0.0.0.0", port=8000)
