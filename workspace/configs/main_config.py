@@ -1,13 +1,13 @@
 from typing import Optional
 
 from fastapi import Path
-from pydantic_settings import SettingsConfigDict
+from pydantic_settings import SettingsConfigDict, BaseSettings
 
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 ENV_PATH = BASE_DIR / "proprts.env"
 
 
-class Settings:
+class Settings(BaseSettings):
     DEBUG: bool = False
     PROJECT_NAME: str = "Repo For Practicing Skills"
     PORT: int = 8000
