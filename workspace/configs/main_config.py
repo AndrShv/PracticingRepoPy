@@ -1,6 +1,6 @@
 from typing import Optional
 
-from fastapi import Path
+from pathlib import Path
 from pydantic_settings import SettingsConfigDict, BaseSettings
 
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
@@ -11,6 +11,7 @@ class Settings(BaseSettings):
     DEBUG: bool = False
     PROJECT_NAME: str = "Repo For Practicing Skills"
     PORT: int = 8000
+    LOG_LEVEL: str = "INFO"
 
     model_config = SettingsConfigDict(
         env_file=("proprts.env", str(ENV_PATH)),
@@ -32,13 +33,13 @@ class Settings(BaseSettings):
             url = self.DATABASE_URL
             if url.startswith("postgresql://"):
                 url = url.replace("postgresql://", "postgresql+asyncpg://", 1)
-            if "?ssl=disable" not in url and "localhost" in url:
+            if "?ssl=disable" not in url and "localhost" in url and "ssl=" not in url:
                 url += "?ssl=disable"
             return url
         return (
             f"postgresql+asyncpg://{self.POSTGRES_USER}:{self.POSTGRES_PASSWORD}"
             f"@{self.POSTGRES_SERVER}:{self.POSTGRES_PORT}/{self.POSTGRES_DB}"
-            f"?ssl=disable"
+            f"?ssl=disable" if self.POSTGRES_SERVER in {"localhost", "127.0.0.1"} else ""
         )
 
     # --- RabbitMQ ---

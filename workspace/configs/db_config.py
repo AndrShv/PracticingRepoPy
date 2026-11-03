@@ -1,20 +1,15 @@
 from typing import AsyncGenerator
 
 from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker, AsyncSession
-from sqlalchemy.orm import DeclarativeBase
 from workspace.configs.main_config import settings
 import asyncio
+
+from workspace.entity.db_models import Base
 
 _async_engine = None
 _session_factory = None
 _db_initialized = False
 _db_init_lock = asyncio.Lock()
-
-class Base(DeclarativeBase):
-    pass
-
-
-
 
 class DbConnection:
     _saved = None
@@ -78,7 +73,4 @@ class DbConnection:
                 return
 
             self._get_session_factory()
-            async with _async_engine.begin() as conn:
-                await conn.run_sync(Base.metadata.create_all)
-
             _db_initialized = True

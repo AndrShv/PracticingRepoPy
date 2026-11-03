@@ -11,7 +11,7 @@ logger = logging.getLogger(__name__)
 GEMINI_MODEL = "gemini-3.6-flash"
 
 
-async def process_task(data: dict[str, str]):
+async def gemini_request(data: dict[str, str]):
     logger.info(f"Начало обработки задачи с данными: {data.__sizeof__()}")
     client = genai.Client(api_key=settings.GEMINI_API_KEY)
     prompt = ""
@@ -38,7 +38,7 @@ def sort_data(data: dict[str, str]):
     logger.info(f"Запуск Celery задачи для обработки данных: {data.__sizeof__()}")
     try:
         logger.info(f"Начало выполнения задачи с данными: {data.__sizeof__()}")
-        asyncio.run(process_task(data))
+        asyncio.run(gemini_request(data))
     except Exception as e:
         logger.error(f"Ошибка при выполнении задачи: {e}")
         raise

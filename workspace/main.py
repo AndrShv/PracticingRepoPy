@@ -3,12 +3,8 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 import uvicorn
 
-from workspace.configs.db_config import DbConnection
-
-
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    await DbConnection().init_db()
     yield
 
 

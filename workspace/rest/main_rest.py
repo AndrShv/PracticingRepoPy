@@ -23,12 +23,22 @@ async def generate_text(data: GeneratingRequest):
 
     }
 
+
 @main_router.get("/task/{task_id}")
 async def get_task_status(task_id: uuid.UUID):
     logger.info(f"Getting status for task: {task_id}")
     task_result = await AI_Repo.get_output_by_id(task_id)
-    return {
-        "task_id": str(task_id),
-        "status": task_result.status,
-        "result": task_result.result if task_result.ready() else "Pending"
-    }
+
+    current_task_status = task_result.status
+    if current_task_status == "PENDING":
+        return {
+            "task_id": task_id,
+            "status": current_task_status,
+            "details": "Task is still being processed. Please check back later."
+        }
+    else:
+        return {
+            "task_id": task_id,
+            "status": task_result.status,
+            "result": task_result.result if task_result.ready() else "Pending"
+        }

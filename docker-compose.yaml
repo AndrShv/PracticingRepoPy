@@ -3,7 +3,7 @@ services:
     image: postgres:17-alpine
     container_name: postgres_container
     environment:
-      POSTGRES_DB: example_db
+      POSTGRES_DB: ml_service
       POSTGRES_USER: root
       POSTGRES_PASSWORD: 1111
     restart: unless-stopped
@@ -68,7 +68,6 @@ services:
 
   celery_worker:
     build: .
-    container_name: celery_worker_container
     command: [ "celery", "-A", "workspace.configs.celery_config:celery_app", "worker", "--loglevel=info" ]
     environment:
       RABBIT_HOST: rabbitmq

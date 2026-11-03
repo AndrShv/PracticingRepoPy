@@ -8,7 +8,7 @@ from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 class Base(DeclarativeBase):
     pass
 
-class Db_ModelResponse(Base):
+class DbModelResponse(Base):
     __tablename__ = "model_responses"
     id: Mapped[uuid.UUID] = mapped_column(
         Uuid(as_uuid=True),
@@ -23,5 +23,9 @@ class Db_ModelResponse(Base):
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now(), nullable=False
     )
+
+
+# Backwards-compatible alias for existing repository imports.
+Db_ModelResponse = DbModelResponse
 
 
