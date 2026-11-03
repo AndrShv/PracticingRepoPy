@@ -2,7 +2,7 @@ import logging
 import uuid
 
 from fastapi import APIRouter
-
+from workspace.repos.ai_repo import AI_Repo
 from workspace.dto.requests import GeneratingRequest
 from workspace.services.worker import sort_data
 
@@ -26,9 +26,9 @@ async def generate_text(data: GeneratingRequest):
 @main_router.get("/task/{task_id}")
 async def get_task_status(task_id: uuid.UUID):
     logger.info(f"Getting status for task: {task_id}")
-    task_result = sort_data.AsyncResult(str(task_id))
+    task_result = await AI_Repo.get_output_by_id(task_id)
     return {
         "task_id": str(task_id),
         "status": task_result.status,
-        "result": task_result.result if task_result.ready() else None
+        "result": task_result.result if task_result.ready() else "Pending"
     }

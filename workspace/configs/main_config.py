@@ -82,5 +82,6 @@ class Settings(BaseSettings):
             return f"{scheme}://default:{self.REDIS_PASSWORD}@{self.REDIS_HOST}:{self.REDIS_PORT}/1"
         return f"redis://{self.REDIS_HOST}:{self.REDIS_PORT}/1"
 
+    GEMINI_API_KEY : Optional[str] = None
 
 settings = Settings()
